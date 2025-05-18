@@ -50,8 +50,8 @@ const createFacultyUser = catchAsync(async(req, res, next) => {
 } )
 
 const createAdminUser = catchAsync(async(req, res , next)=> {
-    const {passWord, admin: adminData} = req.body;
-    const result = await UserServices.createAdminUserIntoDB(passWord, adminData)
+    const {password, admin: adminData} = req.body;
+    const result = await UserServices.createAdminUserIntoDB(password, adminData)
     
     sendResponse(res, {
         statusCode: status.OK,
@@ -60,6 +60,24 @@ const createAdminUser = catchAsync(async(req, res , next)=> {
         data: result
     })
 })
+
+const getMe = catchAsync(async(req, res) => {
+    const {userId, role} = req.user;
+    const result = await UserServices.getMeFromDB(userId, role);
+    sendResponse(res, {
+        statusCode: status.OK,
+        success: true,
+        message: "User is retrieved successfully!",
+        data: result,
+    })
+})
+
+export const UserControllers = {
+    createStudentUser,
+    createFacultyUser,
+    createAdminUser,
+    getMe,
+}
 // const createUser: RequestHandler = async(req, res, next)=>{
 //     try{
 //         const {password, student:studentData} = req.body;
@@ -91,8 +109,3 @@ const createAdminUser = catchAsync(async(req, res , next)=> {
 //     }
 // }
 
-export const UserControllers = {
-    createStudentUser,
-    createFacultyUser,
-    createAdminUser,
-}

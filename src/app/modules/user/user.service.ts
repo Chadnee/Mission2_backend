@@ -148,10 +148,26 @@ const createAdminUserIntoDB = async(password: string, adminData: TAdmin) => {
          throw new AppError(status.BAD_REQUEST,err)
      }
     }
+
+const getMeFromDB = async(userId: string, role: string)=>{
+     let result = null;
+
+     if(role === 'student'){
+        result = await Student.findOne({id: userId})
+     };
+     if(role === 'admin'){
+        result = await Admin.findOne({id: userId})
+     };
+     if(role === 'faculty'){
+        result = await Faculty.findOne({id: userId})
+     };
+     return result;
+}
 export const UserServices = {
     createStudentUserIntoDB,
     createFacultyUserIntoDB,
     createAdminUserIntoDB,
+    getMeFromDB,
 }
 // import config from "../../config";
 // import { AcademicSemesterModel } from "../academicSemester/academicSemester.schemaAndmodel";

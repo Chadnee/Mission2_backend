@@ -18,4 +18,6 @@ router.post('/create-faculty', validateRequest(facultiesValidation.createFaculty
 
 router.post('/create-admin', validateRequest(adminValidation.createAdminValidation), UserControllers.createAdminUser);
 
+router.get('/me', auth('admin','faculty','student'), UserControllers.getMe)
+
 export const UserRoutes = router;
