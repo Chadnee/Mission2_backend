@@ -1,0 +1,1 @@
+export const grade = ['A', 'B', 'C', 'D', 'F', 'N/A']

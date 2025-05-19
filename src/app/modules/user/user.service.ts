@@ -21,7 +21,7 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
     //if user is not given, use default password by  importing from config
     userData.password = password || (config.default_password as string)
     
-    //set student role
+    //set student role 
     userData.role = 'student'
     userData.email = studentData.email;
     //set mannually generated id
@@ -42,7 +42,7 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
 
           const imageName = `${userData?.id}${studentData?.name?.firstName}`
           const path = file?.path
-          sendImageCloudinary(imageName, path)
+        //  sendImageCloudinary(imageName, path)
          const {secure_url} = await sendImageCloudinary(imageName, path)
           
          //create a user
@@ -78,7 +78,7 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
     
 }
 
-const createFacultyUserIntoDB = async(passWord: string, facultyData:TFaculty)=>{
+const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TFaculty)=>{
     let userData: Partial<TUser> = {}
     
     userData.password = passWord || config.default_password
@@ -93,6 +93,9 @@ const createFacultyUserIntoDB = async(passWord: string, facultyData:TFaculty)=>{
 
     try{
        userData.id = await generatedFacaultiesId();
+       const path = file.path;
+       const imageName = `${userData?.id}_${facultyData?.name}`
+       const {secure_url} = await sendImageCloudinary(imageName, path);
 
        const newUser = await User.create([userData], {session})
        if(!newUser.length){
@@ -101,6 +104,7 @@ const createFacultyUserIntoDB = async(passWord: string, facultyData:TFaculty)=>{
        if(Object.keys(newUser).length){
         facultyData.id = newUser[0].id;
         facultyData.user = newUser[0]._id;
+        facultyData.profileImage = secure_url;
 
         const newFaculty = await Faculty.create([facultyData], {session})
 
@@ -110,7 +114,7 @@ const createFacultyUserIntoDB = async(passWord: string, facultyData:TFaculty)=>{
 
         await session.commitTransaction();
         await session.endSession
-        return newFaculty;
+        return {newFaculty, newUser};
        }
     }catch(err){
         await session.abortTransaction();
@@ -120,7 +124,7 @@ const createFacultyUserIntoDB = async(passWord: string, facultyData:TFaculty)=>{
 
 }
 
-const createAdminUserIntoDB = async(password: string, adminData: TAdmin) => {
+const createAdminUserIntoDB = async(file:any, password: string, adminData: TAdmin) => {
     let userData: Partial<TUser> = {};
     userData.password = password || config.default_password;
     userData.role = "admin";
@@ -131,6 +135,10 @@ const createAdminUserIntoDB = async(password: string, adminData: TAdmin) => {
 
     try{
         userData.id = await generatedAdminId();
+        const path = file.path;
+        const imageName = `${userData?.id}_${adminData?.name}`
+        const {secure_url} = await sendImageCloudinary(imageName, path);
+
         const newUser = await User.create([userData], {session})
         if(!newUser.length){
          throw new AppError( status.BAD_REQUEST, "Failed to create new User!")
@@ -139,6 +147,7 @@ const createAdminUserIntoDB = async(password: string, adminData: TAdmin) => {
      if(Object.keys(newUser).length){
          adminData.id = newUser[0].id;
          adminData.user = newUser[0]._id;
+         adminData.profileImage = secure_url;
      }
  
         const newAdmin = await Admin.create([adminData], {session})

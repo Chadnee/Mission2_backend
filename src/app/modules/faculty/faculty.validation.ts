@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const createFacultyValidation = z.object({
     body: z.object({
-        password: z.string().max(20),
+        password: z.string().max(20).optional(),
         faculty: z.object({
             designation: z.string(),
             name: z.string().min(1).max(20).refine((value)=> /^[A-Z]/.test(value), {
@@ -14,7 +14,8 @@ const createFacultyValidation = z.object({
             emergencyContactNo: z.string(),
             presentAddress: z.string(),
             permanentAddress: z.string(),
-            profileImage: z.string(),
+            //profile image will be created by req.file with multer and cloudinary
+            // profileImage: z.string(),
             academicDepartment: z.string(),
         
         })

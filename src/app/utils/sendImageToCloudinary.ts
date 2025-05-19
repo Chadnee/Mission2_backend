@@ -23,6 +23,7 @@ return uploadResult;
 //console.log(uploadResult);
 }
 
+//from multer npm js, create storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, process.cwd()+'/uploads/')
