@@ -9,7 +9,7 @@ import { User } from '../modules/user/user.schemaAndModel';
     const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
     const token = req.headers.authorization;
-    console.log('token', token );
+    // console.log('token', token );
     if (!token) {
       throw new AppError(status.UNAUTHORIZED, 'You are not authorized, no token');
     }

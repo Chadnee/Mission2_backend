@@ -28,7 +28,7 @@ const localGuardianValidationSchema = z.object({
  const createStudentValidationSchema = z.object({
   body: z.object({
    // id: z.string(),
-    password: z.string().max(20),
+    password: z.string().max(20).optional(),
     student: z.object({
       name: userNameValidationSchema,
       gender: z.enum(["male", "female"]),
@@ -42,7 +42,7 @@ const localGuardianValidationSchema = z.object({
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       admissionSemester: z.string(),
-       profileImage: z.string(),
+       //profileImage: z.string(),
        academicDepartment: z.string(),
     })
     //drkar nei, auto generated

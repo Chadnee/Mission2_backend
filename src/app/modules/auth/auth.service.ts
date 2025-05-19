@@ -174,7 +174,7 @@ const forgetPasswordIntoDB = async(id: string) => {
   ); //which is also a accesstoken
   const resetUILink = `${config.reset_password_ui_link}?id=${user.id}&token=${resetToken}`;
   //const resetUILink = `http://localhost:5174?id=${user.id}&token=${resetTokwn }`;
-  console.log(resetUILink, user.email)
+  //console.log(resetUILink, user.email)
   sendEmail(user.email, resetUILink);
  }
 

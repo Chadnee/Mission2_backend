@@ -12,8 +12,9 @@ import { TFaculty } from "../faculty/faculty.interface";
 import { Faculty } from "../faculty/faculty.schemaAndModule";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.schemaAndModel";
+import { sendImageCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createStudentUserIntoDB = async(password: string, studentData: TStudent) => {
+const createStudentUserIntoDB = async(file:any, password: string, studentData: TStudent) => {
     
     let userData:Partial<TUser> = {};
 
@@ -34,13 +35,17 @@ const createStudentUserIntoDB = async(password: string, studentData: TStudent) =
 
     const session = await mongoose.startSession();
 
-    session.startTransaction();
-
-try{
+    try{
+          session.startTransaction();
           //set generated id
           userData.id = await generatedStudentId(admissionSemester)
- 
-          //create a user
+
+          const imageName = `${userData?.id}${studentData?.name?.firstName}`
+          const path = file?.path
+          sendImageCloudinary(imageName, path)
+         const {secure_url} = await sendImageCloudinary(imageName, path)
+          
+         //create a user
           const newUser = await User.create([userData], {session});
       
           if(!newUser.length){
@@ -51,6 +56,7 @@ try{
               //set id, _id as user
               studentData.id = newUser[0].id; //embedding id
               studentData.user= newUser[0]._id;//reference _id
+              studentData.profileImage=secure_url
       
               const newStudent = await Student.create([studentData], {session});
       
@@ -61,7 +67,7 @@ try{
               await session.commitTransaction();
               await session.endSession();
               
-              return newStudent;
+              return {newStudent, newUser};
           }
     
 } catch(err) {
