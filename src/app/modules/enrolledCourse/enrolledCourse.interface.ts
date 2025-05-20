@@ -6,7 +6,7 @@ export type TCourseMarks = {
     finalTerm: number;
 }
 
-export type TGrade ='A' | 'B' | 'B' | 'C' | 'D' | 'F' | 'N/A';
+export type TGrade ='A' | 'B' | 'B' | 'C' | 'D' | 'F' | 'NA';
 
 export type TEnrolledCourse = {
     semesterRegistration: Types.ObjectId;
