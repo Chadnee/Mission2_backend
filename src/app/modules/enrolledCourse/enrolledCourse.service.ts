@@ -8,6 +8,7 @@ import { Student } from "../student/student.scemaAndModel";
 import mongoose from "mongoose";
 import { SemesterRegistration } from "../semestersRegistration/semesterRegistration.modelAndSchema";
 import { lookup } from 'dns';
+import { Course } from '../course/course.schemaAndModel';
 
 const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse) => {
      const {offeredCourse} = payload;
@@ -21,8 +22,8 @@ const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse
      }
 
      //check if the student is already enrolled!
-     const student_id = await Student.findOne({id: userId}, {_id:1});
-   //   const student_id = student?._id
+     const student = await Student.findOne({id: userId});
+      const student_id = student?._id
      const isStudentAlreadyEnrolled = await EnrolledCourse.findOne({
         semesterRegistration: isOfferedCourseExist?.semesterRegistration,
         offeredCourse,
@@ -33,20 +34,22 @@ const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse
         throw new AppError (status.FORBIDDEN, "This student is already enrolled")
      }
       const semsesterRegistration = await SemesterRegistration.findById(isOfferedCourseExist.semesterRegistration).select('maxCredit');
+      
+      // aggregate for finding total credit of a student in same semester inoffered course
       const enrolledCourse = await EnrolledCourse.aggregate([
          {
             $match: {
                semesterRegistration: isOfferedCourseExist.semesterRegistration,
-               Student: student_id,
+               student: student_id,
             },
            
          },
          {
             $lookup: {
-               from: 'courses',
+               from:'courses',
                localField:'course',
                foreignField:'_id',
-               as: 'enrolledCourseData'
+               as:'enrolledCourseData'
             }
          },
          {
@@ -55,7 +58,7 @@ const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse
          {
             $group: {
                _id: null,
-               totalEnrolledCredits: {$sum:'$enrolledCourseData.credit'}
+               totalEnrolledCredits: {$sum:'$enrolledCourseData.credits'}
             }
          },
          {
@@ -64,9 +67,17 @@ const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse
                totalEnrolledCredits: 1
             }
          }
-      ])
-      console.log(enrolledCourse)
+       ])
+       
+      console.log('b',enrolledCourse)
+      const totalCredits = enrolledCourse.length>0?enrolledCourse[0].totalEnrolledCredits : 0
+     
+      const course = await Course.findById(isOfferedCourseExist.course);
 
+      if(totalCredits && semsesterRegistration?.maxCredit 
+         && totalCredits+course){
+            throw new AppError(status.BAD_REQUEST, "You have exceeded maximum number of credits!")
+         }
    //      const session = await mongoose.startSession();
    //   try{
    //       session.startTransaction();
