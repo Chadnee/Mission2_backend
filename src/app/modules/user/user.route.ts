@@ -12,7 +12,7 @@ import { User } from './user.schemaAndModel';
 const router = express.Router();
 
 
-router.post('/create-student', auth(USER_ROLE.admin),
+router.post('/create-student', auth(USER_ROLE.admin, USER_ROLE.superAdmin),
   upload.single('file'),
   (req:Request, res:Response, next: NextFunction) => {
    req.body = JSON.parse(req.body.data);
@@ -21,7 +21,7 @@ router.post('/create-student', auth(USER_ROLE.admin),
    validateRequest(studentValidations.createStudentValidationSchema), 
    UserControllers.createStudentUser);
 
-router.post('/create-faculty', auth(USER_ROLE.admin),
+router.post('/create-faculty', auth(USER_ROLE.admin, USER_ROLE.superAdmin),
 upload.single('file'),(req:Request, res:Response, next:NextFunction) =>{
   req.body = JSON.parse(req.body.data);
   next()
@@ -29,7 +29,7 @@ upload.single('file'),(req:Request, res:Response, next:NextFunction) =>{
 validateRequest(facultiesValidation.createFacultyValidation), UserControllers.createFacultyUser);
 
 router.post('/create-admin', 
-   auth(USER_ROLE.admin),
+   auth(USER_ROLE.superAdmin),
 upload.single('file'),
 (req: Request, res: Response, next:NextFunction) => {
   req.body = JSON.parse(req.body.data);

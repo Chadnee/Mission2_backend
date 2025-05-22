@@ -6,6 +6,7 @@ import config from './app/config';
 import mongoose from 'mongoose';
 
 import { Server } from 'http';
+import { seedSuperAdmin } from './app/modules/DB';
 
 let server : Server;
 
@@ -15,7 +16,7 @@ async function main() {
     await mongoose.connect(config.database_url as string, {
       autoIndex: true
     });
-    
+   await seedSuperAdmin() //check is super admin exist? if not, it will create super admin to the first user 
    server = app.listen(config.port, () => {
       console.log( `app listening on port ${config.port}`);
 

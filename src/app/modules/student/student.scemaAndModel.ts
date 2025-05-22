@@ -71,7 +71,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     permanentAddress: {type:String, required: true},
     guardian:{type: guardianSchema, required: [true, "guardian is must be required"]},
     localGuardian: {type: localGuardianSchema, required: [true, "Local guardian is must be required"]},
-    profileImage: {type:String},
+    profileImage: {
+        type:String,
+        default: ''
+    },
     admissionSemester: {
         type: Schema.Types.ObjectId,
         ref: 'AcademicSemester' //jeta export koreci seta noy, ()er vitorer model name dite hobe, tobe quation chara dile export name deya jabe , 
@@ -81,6 +84,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
         type: Schema.Types.ObjectId,
         ref: 'academicDepartment' //jeta export koreci seta noy, ()er vitorer model name dite hobe
         // ete mongoose name dhore model khuje nibe, but eta best practive or best dveloper er kaj noy
+    },
+    academicFaculty: {
+        type: Schema.Types.ObjectId,
+        ref: 'AcademicFaculty' 
     },
 //    isActive:{type: String, enum:["active", "blocked"], default:"active"},
     isDeleted: {type: Boolean, default: false}

@@ -13,6 +13,7 @@ import { Faculty } from "../faculty/faculty.schemaAndModule";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.schemaAndModel";
 import { sendImageCloudinary } from "../../utils/sendImageToCloudinary";
+import { AcademicDepartment } from "../academic Department/academicDepartment.schemaAndModel";
 
 const createStudentUserIntoDB = async(file:any, password: string, studentData: TStudent) => {
     
@@ -32,6 +33,10 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
         throw new Error('Admission semester not found')
     };
     //console.log(admissionSemester)
+          const academicDepartment = await AcademicDepartment.findById(studentData.academicDepartment);
+          if(!academicDepartment){
+            throw new AppError(status.NOT_FOUND, "The academic department is not found!")
+          }
 
     const session = await mongoose.startSession();
 
@@ -39,12 +44,13 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
           session.startTransaction();
           //set generated id
           userData.id = await generatedStudentId(admissionSemester)
-
-          const imageName = `${userData?.id}${studentData?.name?.firstName}`
+          if(file) {
+             const imageName = `${userData?.id}${studentData?.name?.firstName}`
           const path = file?.path
         //  sendImageCloudinary(imageName, path)
          const {secure_url} = await sendImageCloudinary(imageName, path)
-          
+           studentData.profileImage=secure_url as string;
+          }
          //create a user
           const newUser = await User.create([userData], {session});
       
@@ -52,11 +58,13 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
                throw new AppError(status.BAD_REQUEST, 'Failed to create user')
           }
           
+
+         
           if(Object.keys(newUser).length){
               //set id, _id as user
               studentData.id = newUser[0].id; //embedding id
               studentData.user= newUser[0]._id;//reference _id
-              studentData.profileImage=secure_url
+              studentData.academicFaculty=academicDepartment.academicFaculty;
       
               const newStudent = await Student.create([studentData], {session});
       
@@ -93,10 +101,14 @@ const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TF
 
     try{
        userData.id = await generatedFacaultiesId();
+      if(file) {
+          
        const path = file.path;
        const imageName = `${userData?.id}_${facultyData?.name}`
        const {secure_url} = await sendImageCloudinary(imageName, path);
+       facultyData.profileImage = secure_url as string;
 
+      }
        const newUser = await User.create([userData], {session})
        if(!newUser.length){
         throw new AppError(status.BAD_REQUEST, 'User creation is failed')
@@ -104,7 +116,6 @@ const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TF
        if(Object.keys(newUser).length){
         facultyData.id = newUser[0].id;
         facultyData.user = newUser[0]._id;
-        facultyData.profileImage = secure_url;
 
         const newFaculty = await Faculty.create([facultyData], {session})
 
@@ -135,10 +146,13 @@ const createAdminUserIntoDB = async(file:any, password: string, adminData: TAdmi
 
     try{
         userData.id = await generatedAdminId();
+        if(file) {
         const path = file.path;
         const imageName = `${userData?.id}_${adminData?.name}`
         const {secure_url} = await sendImageCloudinary(imageName, path);
+        adminData.profileImage = secure_url as string;
 
+        }
         const newUser = await User.create([userData], {session})
         if(!newUser.length){
          throw new AppError( status.BAD_REQUEST, "Failed to create new User!")
@@ -147,7 +161,6 @@ const createAdminUserIntoDB = async(file:any, password: string, adminData: TAdmi
      if(Object.keys(newUser).length){
          adminData.id = newUser[0].id;
          adminData.user = newUser[0]._id;
-         adminData.profileImage = secure_url;
      }
  
         const newAdmin = await Admin.create([adminData], {session})

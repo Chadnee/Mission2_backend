@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import config from '../config';
 import multer from 'multer';
 
-export const sendImageCloudinary = async(imageName:string, path:string) => {
+export const sendImageCloudinary = async(imageName:string, path:string):Promise<Record<string, unknown>> => {
       // Configuration
   cloudinary.config({ 
     cloud_name: config.clouddinary_cloud_name, 
@@ -24,7 +24,7 @@ return uploadResult;
 }
 
 //from multer npm js, create storage
-const storage = multer.diskStorage({
+const storage = multer.diskStorage({    
     destination: function (req, file, cb) {
       cb(null, process.cwd()+'/uploads/')
     },

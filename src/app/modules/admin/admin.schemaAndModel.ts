@@ -49,9 +49,9 @@ const adminSchema = new Schema<TAdmin>({
         type: String,
         required: true,
     },
-    profileImage: {
-        type: String,
-        required: true,
+      profileImage: {
+        type:String,
+        default: ''
     },
     managementDepartment: {
         type: String,
