@@ -26,6 +26,8 @@ const courseMarksSchema = new Schema<TCourseMarks>({
   },
   finalTerm: {
     type: Number,
+    min: 0,
+    max:100,
     default: 0,
   },
 });
@@ -78,7 +80,7 @@ const enrolledCourseSchema = new Schema<TEnrolledCourse>({
     type: courseMarksSchema,
     default: {},
   },
-  garade: {
+  grade: {
     type: String,
     enum: grade,
     default: 'NA',
