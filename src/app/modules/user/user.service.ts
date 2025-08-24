@@ -95,6 +95,10 @@ const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TF
 
     userData.role = 'faculty'
     userData.email = facultyData.email;
+    const academicDepartment = await AcademicDepartment.findById(facultyData.academicDepartment);
+    if(!academicDepartment){
+        throw new AppError(status.NOT_FOUND, 'Department is not found')
+    }
 
     const session = await mongoose.startSession();
     session.startTransaction()
@@ -116,6 +120,7 @@ const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TF
        if(Object.keys(newUser).length){
         facultyData.id = newUser[0].id;
         facultyData.user = newUser[0]._id;
+        facultyData.academicFaculty = academicDepartment.academicFaculty;
 
         const newFaculty = await Faculty.create([facultyData], {session})
 

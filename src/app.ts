@@ -13,7 +13,7 @@ const app = express();
 //parsers
 app.use(cookieParser())
 app.use(express.json());
-app.use(cors({origin: ['http://localhost:5173']}));
+app.use(cors({origin: 'http://localhost:5173', credentials:true}));
 
 //application routes
 
@@ -22,9 +22,9 @@ app.use("/api/v1", router );
 // app.use("/api/v1", UserRoutes)
 
 app.get('/', async(req: Request, res: Response) => {
-  // const a = 10;
-   //res.send("hello worldddd");
-   Promise.reject();
+  const a = 10;
+   res.send("hello worldddd");
+  //  Promise.reject();
 });
 
 //calling middlewere for not found and global error handler to handle centrally

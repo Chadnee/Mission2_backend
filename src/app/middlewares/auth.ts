@@ -13,11 +13,23 @@ import { User } from '../modules/user/user.schemaAndModel';
     if (!token) {
       throw new AppError(status.UNAUTHORIZED, 'You are not authorized, no token');
     }
-     
+       //let decoded : JwtPayload
+      
+            //when access token will be expired 
+                 try {
         const decoded = jwt.verify(
             token,config.jwt_access_secret as string)as JwtPayload;
+          console.log(decoded.role)
+          } catch(err) {
+          throw new AppError(status.UNAUTHORIZED, 'Expired') //when access token is expired, it will show the 401 error status
+        }
+          const decoded = jwt.verify(
+            token,config.jwt_access_secret as string)as JwtPayload;
 
+          
+    console.log(decoded);
         const {role, userId, iat}= decoded;
+        console.log(role)
           if (requiredRoles && !requiredRoles.includes(role)) {
             throw new AppError(status.UNAUTHORIZED, 'You are not authorized hi');
           }

@@ -1,3 +1,4 @@
+import { academicFacultyValidation } from './../academicFaculty/academicFaculty.validation';
 import { model, Schema, Types } from "mongoose";
 import { TFaculty } from "./faculty.interface";
 import AppError from "../../Error/AppError";
@@ -59,6 +60,11 @@ const facultySchema = new Schema<TFaculty>({
         type: Schema.Types.ObjectId,
         ref :'academicDepartment',
         required: true,
+    },
+    academicFaculty: {
+        type: Schema.Types.ObjectId,
+        ref: 'AcademicFaculty',
+        required:true 
     },
     isDeleted: {
         type: Boolean,

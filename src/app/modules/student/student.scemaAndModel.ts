@@ -82,12 +82,14 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     academicDepartment: {
         type: Schema.Types.ObjectId,
-        ref: 'academicDepartment' //jeta export koreci seta noy, ()er vitorer model name dite hobe
+        ref: 'academicDepartment', //jeta export koreci seta noy, ()er vitorer model name dite hobe
         // ete mongoose name dhore model khuje nibe, but eta best practive or best dveloper er kaj noy
+        required:true
     },
     academicFaculty: {
         type: Schema.Types.ObjectId,
-        ref: 'AcademicFaculty' 
+        ref: 'AcademicFaculty',
+        required:true 
     },
 //    isActive:{type: String, enum:["active", "blocked"], default:"active"},
     isDeleted: {type: Boolean, default: false}
