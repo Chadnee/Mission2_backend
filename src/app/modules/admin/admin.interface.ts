@@ -4,7 +4,7 @@ export type TAdmin = {
     name: string;
     id: string;
     designation: string;
-    gender: 'male' | 'female';
+    gender: 'male' | 'female' | 'other';
     dateOfBirth: string;
     email: string;
     contactNo: string;

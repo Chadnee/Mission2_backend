@@ -46,7 +46,8 @@ const getAllSemesterRegistrationIntoDB = async(query: Record<string, unknown>) =
     .filter()
     .paginate()
     const result = await semseterRegistrationQuery.modelQuery;
-    return result;
+    const meta = await semseterRegistrationQuery.countTotal()
+    return{ meta,result};
 }
 
 const getSingleSemesterRegistrationIntoDB = async(id:string) => {
@@ -56,7 +57,7 @@ const getSingleSemesterRegistrationIntoDB = async(id:string) => {
 
 const updateSemesterRegistrationIntoDB = async(id: string, payload: Partial<TSmesterRegistration>) => {
     const isSemesterRegistrationExists = await SemesterRegistration.findById(id)
-   
+    console.log('id', id)
     if(!isSemesterRegistrationExists){
         throw new AppError(status.NOT_FOUND, 'This semsetre is not found')
     }
@@ -82,7 +83,7 @@ const updateSemesterRegistrationIntoDB = async(id: string, payload: Partial<TSme
         throw new AppError(status.BAD_REQUEST, `Yoou can not directly change from ${currentSemesterStatus} to ${requestedSemesterStatus}`)
      }
 
-     const result = await SemesterRegistration.findById(
+     const result = await SemesterRegistration.findByIdAndUpdate(
         id, 
         payload,
         {new: true, runValidators: true}

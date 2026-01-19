@@ -22,7 +22,8 @@ const getAllSemesterRegistration = catchAsync(async(req, res , next) => {
         statusCode: status.OK,
         success: true,
         message: "All registered semester are retrieved",
-        data: result,
+        meta: result.meta,
+        data: result.result,
     })
 })
 
@@ -38,8 +39,8 @@ const getSingleSemesterRegistration = catchAsync(async(req, res) => {
 });
 
 const updateSemesterRegistration = catchAsync(async(req, res) => {
-  const {registration_Id} = req.params;
-  const result = await SemesterRegistrationServices.updateSemesterRegistrationIntoDB(registration_Id, req.body)
+  const {id} = req.params;
+  const result = await SemesterRegistrationServices.updateSemesterRegistrationIntoDB(id, req.body)
 
   sendResponse(res, {
         statusCode: status.OK,

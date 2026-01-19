@@ -21,7 +21,7 @@ router.put('/:course_Id/assign-faculties',
   validateRequest(courseValidation.createAssignCourseWithFacultyValidation),
    CourseControllers.createAssignCourseWithFaculty);
 router.delete('/:course_Id/remove-faculties', CourseControllers.removeFacultyromCourse)
-router.put('/:course_Id/get-faculties',
+router.get('/:course_Id/get-faculties',
   auth('admin', 'superAdmin', 'student', 'faculty'),
   CourseControllers.getFacultiesWithCourse 
 )

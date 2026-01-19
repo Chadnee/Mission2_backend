@@ -3,35 +3,47 @@ import { Faculty } from "../faculty/faculty.schemaAndModule";
 import { User } from "./user.schemaAndModel";
 
 const findLastStudentId = async() => {
-    const lastStudent = await User.findOne(
-        {role:'student'}, {id:1, _id:0}).sort({createdAt:-1}).lean();
+     const lastStudent = await User.findOne(
+    {
+      role: 'student',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
 
-      
-       return lastStudent?.id? lastStudent.id:undefined
- }
-export const generatedStudentId = async(payload : TAcademicSemester) => {
-    let currentId = (0).toString();
-    // console.log(await findLastStudentId())
-    const lastStudentId = await findLastStudentId();
-    const lastStudentSemesterCode = lastStudentId?.substring(4, 6);
-    const lastStudentSemesterYear = lastStudentId?.substring(0, 4)
+  return lastStudent?.id ? lastStudent.id : undefined;
+};
 
-    const currentSemesterCode = payload.code;
-    const currentSemesteryear = payload.year;
+export const generatedStudentId = async (payload: TAcademicSemester) => {
+  let currentId = (0).toString();
+  const lastStudentId = await findLastStudentId();
 
-    if(
-        lastStudentId &&
-        lastStudentSemesterCode === currentSemesterCode &&
-        lastStudentSemesterYear === currentSemesteryear
-    ) {
-        currentId = lastStudentId.substring(6);
-    }
+  const lastStudentSemesterCode = lastStudentId?.substring(4, 6);
+  const lastStudentYear = lastStudentId?.substring(0, 4);
 
-    let incrementId = (Number(currentId) +1).toString().padStart(4, '0') ;
-     incrementId = `${payload.year}${payload.code}${incrementId}`
+  const currentSemesterCode = payload.code;
+  const currentYear = payload.year;
 
-     return incrementId;
-}
+  if (
+    lastStudentId &&
+    lastStudentSemesterCode === currentSemesterCode &&
+    lastStudentYear === currentYear
+  ) {
+    currentId = lastStudentId.substring(6);
+  }
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+
+  incrementId = `${payload.year}${payload.code}${incrementId}`;
+
+  return incrementId;
+};
 
 //generate faculties id
 

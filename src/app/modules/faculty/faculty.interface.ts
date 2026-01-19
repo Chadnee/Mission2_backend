@@ -5,9 +5,13 @@ export type TFaculty = {
     designation: string;
     name: string;
     user: Types.ObjectId;
-    gender: 'male' | 'female';
+    gender: 'male' | 'female' | 'other';
     dateOfBirth: string;
-    email: string;
+    email: {
+    type: String,
+    required: true,
+    unique: true,
+}
     contactNo: string;
     emergencyContactNo: string;
     presentAddress: string;

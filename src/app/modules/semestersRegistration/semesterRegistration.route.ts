@@ -10,8 +10,8 @@ router.post('/create-semsester-registration',
 SemesterRegistrationController.createSemesterRegistration);
 
 router.get('/', SemesterRegistrationController.getAllSemesterRegistration);
-router.get('/:registration_Id', SemesterRegistrationController.getSingleSemesterRegistration)
-router.patch('/:registration_Id', 
+router.get('/:id', SemesterRegistrationController.getSingleSemesterRegistration)
+router.patch('/:id', 
     validateRequest(SemesterRegistrationValidaion.updateSemesterRegistrationValidation),
     SemesterRegistrationController.updateSemesterRegistration
 )

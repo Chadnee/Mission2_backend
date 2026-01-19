@@ -6,7 +6,7 @@ const createAdminValidation = z.object({
     admin : z.object({
     name: z.string().min(1).max(20).refine((value)=>/^[A-Z]/.test(value), 
     {message:"Name must be start with capital letter"}),
-    gender: z.enum(['male', 'female']),
+    gender: z.enum(['male', 'female', 'other']),
     contactNo:z.string(),
     emergencyContactNo:z.string(),
     presentAddress:z.string(),
