@@ -16,6 +16,7 @@ import { sendImageCloudinary } from "../../utils/sendImageToCloudinary";
 import { AcademicDepartment } from "../academic Department/academicDepartment.schemaAndModel";
 import QueryBuilder from "../../builder/queryBuilder";
 import { userSearchableFields } from "./user.constant";
+import { visitor } from "./visitState.schema";
 
 const createStudentUserIntoDB = async(file:any, password: string, studentData: TStudent) => {
     
@@ -231,6 +232,37 @@ const getUserCountsForAdminDashBoardFromDB = async () => {
 
     }
 }
+
+//tracking visistor , How many people visist this website
+const trackVisitorsIntoDB = async( ip: string, userAgent?: string) => {
+ const today = new Date();
+ today.setHours(0,0,0,0) //start of Day
+ 
+ const alreadyVisited = await visitor.findOne({
+    ip,
+    createdAt: {$gt: today}
+ });
+
+ if(!alreadyVisited){
+    await visitor.create({ip, userAgent});
+ }
+
+}
+
+const getVisitorsStateFromDB = async() => {
+    const totalVisistors = await visitor.countDocuments()
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const todayVisitors = await visitor.countDocuments({
+        createdAt: {$gte: today}
+    })
+    return {
+        totalVisistors,
+        todayVisitors
+    }
+}
 export const UserServices = {
     createStudentUserIntoDB,
     createFacultyUserIntoDB,
@@ -238,6 +270,8 @@ export const UserServices = {
     getAllUserFromDB,
     getUserCountsForAdminDashBoardFromDB,
     getMeFromDB,
+    trackVisitorsIntoDB,
+    getVisitorsStateFromDB,
 }
 // import config from "../../config";
 // import { AcademicSemesterModel } from "../academicSemester/academicSemester.schemaAndmodel";

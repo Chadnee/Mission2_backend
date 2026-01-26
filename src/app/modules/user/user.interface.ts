@@ -20,6 +20,12 @@ export interface TUser {
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
 }
+export interface TVisitorState {
+  ip: string;
+  userAgent?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface UserModel extends Model<TUser> {
   //  myStaticMethod(): number;
