@@ -14,6 +14,8 @@ import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.schemaAndModel";
 import { sendImageCloudinary } from "../../utils/sendImageToCloudinary";
 import { AcademicDepartment } from "../academic Department/academicDepartment.schemaAndModel";
+import QueryBuilder from "../../builder/queryBuilder";
+import { userSearchableFields } from "./user.constant";
 
 const createStudentUserIntoDB = async(file:any, password: string, studentData: TStudent) => {
     
@@ -182,6 +184,22 @@ const createAdminUserIntoDB = async(file:any, password: string, adminData: TAdmi
      }
     }
 
+    const getAllUserFromDB = async(query: Record <string, unknown>)=> {
+        const user = new QueryBuilder(User.find(),query)
+        .search(userSearchableFields)
+        .fields()
+        .sort()
+        .paginate()
+        .fields()
+        const result = await user.modelQuery
+        const meta = await user.countTotal()
+
+        return {
+            result, 
+            meta
+        }
+    }
+
 const getMeFromDB = async(userId: string, role: string)=>{
      let result = null;
 
@@ -196,10 +214,29 @@ const getMeFromDB = async(userId: string, role: string)=>{
      };
      return result;
 }
+
+const getUserCountsForAdminDashBoardFromDB = async () => {
+    const counts = await User.aggregate([
+        {
+            $group: {
+                _id: '$role',
+                total: {$sum: 1}
+            }
+        }
+    ])
+    return{
+        students: counts.find(c => c._id === 'student')?.total || 0,
+        faculty: counts.find(c => c._id === 'faculty')?.total || 0,
+        admins: counts.find(c => c._id === 'admin')?.total || 0,
+
+    }
+}
 export const UserServices = {
     createStudentUserIntoDB,
     createFacultyUserIntoDB,
     createAdminUserIntoDB,
+    getAllUserFromDB,
+    getUserCountsForAdminDashBoardFromDB,
     getMeFromDB,
 }
 // import config from "../../config";

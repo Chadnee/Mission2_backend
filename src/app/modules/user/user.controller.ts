@@ -64,13 +64,38 @@ const createAdminUser = catchAsync(async(req, res , next)=> {
     })
 })
 
+const getAllUser = catchAsync(async(req, res) => {
+    const query = req.query;
+    const result = await UserServices.getAllUserFromDB(query);
+
+    sendResponse(res, {
+        statusCode: status.OK,
+        success: true,
+        message:"All users are retrieved successfully",
+        data: {
+            meta: result.meta,
+            data: result.result
+        }
+    })
+})
+
+const getUsersCountForAdminDashBoard = catchAsync(async(req, res) => {
+    const result = await UserServices.getUserCountsForAdminDashBoardFromDB();
+     sendResponse( res, {
+        statusCode: status.OK,
+        success: true,
+        message: "Total users are counted based on their role",
+        data: result
+     })
+})
+
 const getMe = catchAsync(async(req, res) => {
     const {userId, role} = req.user;
     const result = await UserServices.getMeFromDB(userId, role);
     sendResponse(res, {
         statusCode: status.OK,
         success: true,
-        message: "User is retrieved successfully!",
+        message: "Existing User is retrieved successfully!",
         data: result,
     })
 })
@@ -79,6 +104,8 @@ export const UserControllers = {
     createStudentUser,
     createFacultyUser,
     createAdminUser,
+    getAllUser,
+    getUsersCountForAdminDashBoard,
     getMe,
 }
 // const createUser: RequestHandler = async(req, res, next)=>{

@@ -117,7 +117,8 @@ const removeFacultyFromCourseFromDB = async(id: string, payload: Partial<TAssign
     return result;
 };
 const getFacultiesWithCourseFromDB = async(course_Id: string) => {
-  const result = await CourseFaculty.findOne({course: course_Id}).populate('faculty')
+   console.log( 'server' ,course_Id)
+    const result = await CourseFaculty.findOne({course: course_Id}).populate('faculties')
   return result;
 }
 

@@ -22,7 +22,7 @@ router.put('/:course_Id/assign-faculties',
    CourseControllers.createAssignCourseWithFaculty);
 router.delete('/:course_Id/remove-faculties', CourseControllers.removeFacultyromCourse)
 router.get('/:course_Id/get-faculties',
-  auth('admin', 'superAdmin', 'student', 'faculty'),
+  // auth('admin', 'superAdmin', 'student', 'faculty'),
   CourseControllers.getFacultiesWithCourse 
 )
 export const CourseRouter = router;

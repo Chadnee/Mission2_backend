@@ -91,7 +91,8 @@ const removeFacultyromCourse = catchAsync(async( req, res , next)=> {
   })
 })
 const getFacultiesWithCourse = catchAsync(async(req, res) => {
-    const {course_Id} = req.params;
+   const {course_Id} = req.params;
+    console.log('control', course_Id)
     const result = await CourseServices.getFacultiesWithCourseFromDB(course_Id);
     sendResponse(res, {
         statusCode: status.OK,

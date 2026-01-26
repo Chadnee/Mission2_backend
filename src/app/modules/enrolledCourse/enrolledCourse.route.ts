@@ -12,6 +12,9 @@ EnrolledCourseControllers.createEnrolledCourse),
 router.patch('/update-course-marks',
     auth('faculty'), validateRequest(EnrolledCourseValidation.updateEnrolledCourseMarksValidationSchema),
     EnrolledCourseControllers.updateEnrolledCourseMarks
-)
+),
+router.get('/my-enrolled-course',
+    auth('student'),
+EnrolledCourseControllers.getMyEnrolledCourses)
 
 export const enrolledCourseRoutes = router

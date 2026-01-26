@@ -37,6 +37,9 @@ upload.single('file'),
 },
 validateRequest(adminValidation.createAdminValidation), UserControllers.createAdminUser);
 
+router.get('/', auth('admin', 'superAdmin'),UserControllers.getAllUser);
+router.get('/total-users', auth('admin', 'superAdmin'),UserControllers.getUsersCountForAdminDashBoard);
+
 router.get('/me', auth('admin','faculty','student'), UserControllers.getMe)
 
 export const UserRoutes = router;
