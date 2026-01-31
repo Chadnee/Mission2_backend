@@ -62,11 +62,12 @@ const enrolledCourseSchema = new Schema<TEnrolledCourse>({
     ref: 'Course',
     require: true,
   },
-  student: {
-    type: Schema.Types.ObjectId,
-    ref: 'Student',
-    require: true,
-  },
+      student: {
+        type: Schema.Types.ObjectId,
+        ref: "Student",
+        required: true,
+        unique: true
+    },
   faculty: {
     type: Schema.Types.ObjectId,
     ref: 'faculty',
@@ -96,6 +97,8 @@ const enrolledCourseSchema = new Schema<TEnrolledCourse>({
     default: false,
   },
 });
+
+enrolledCourseSchema.index({ student: 1, isEnrolled: 1 });
 
 export const EnrolledCourse = model<TEnrolledCourse>(
   'EnrolledCourse',

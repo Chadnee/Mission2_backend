@@ -16,5 +16,14 @@ router.patch('/update-course-marks',
 router.get('/my-enrolled-course',
     auth('student'),
 EnrolledCourseControllers.getMyEnrolledCourses)
+router.get('/',
+    auth('admin', 'superAdmin'),
+EnrolledCourseControllers.getAllEnrolledCourses)
+router.post('/student-enrollment-stats/generate',
+    auth('admin', 'superAdmin'),
+EnrolledCourseControllers.generateStudentEnrollmentStats)
+router.get('/student-enrollment-stats',
+    auth('admin', 'superAdmin'),
+EnrolledCourseControllers.getTotalEnrolledCoursePerStudent)
 
 export const enrolledCourseRoutes = router

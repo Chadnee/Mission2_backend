@@ -1,4 +1,4 @@
-import { grade } from './enrolledCourse.const';
+import { enrolledCourseSearchableFields, grade } from './enrolledCourse.const';
 import { Student } from './../student/student.scemaAndModel';
 import status from "http-status";
 import AppError from "../../Error/AppError";
@@ -12,6 +12,7 @@ import { Course } from '../course/course.schemaAndModel';
 import { Faculty } from '../faculty/faculty.schemaAndModule';
 import { calculateGradePoints } from './endCourse.utils';
 import QueryBuilder from '../../builder/queryBuilder';
+import { StudentEnrollmentStats } from './studentEnrollmentsStatsSchema';
 
 const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse) => {
      const {offeredCourse} = payload;
@@ -179,6 +180,29 @@ const updateEnrolledCourseMarksIntoDB = async(
    );
    return result;
 }
+const getAllEnrolledCourseFromDB = async (query: Record<string, unknown>) => {
+   const enrolledCourse = new QueryBuilder(EnrolledCourse.find()
+  .populate('offeredCourse')
+    .populate('course')
+    .populate('faculty')
+
+    .populate('academicSemester')
+    .populate('academicFaculty')
+    .populate('academicDepartment'), query)
+    .search(enrolledCourseSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await enrolledCourse.modelQuery;
+  const meta = await enrolledCourse.countTotal();
+
+  return {
+    meta,
+    result
+  }}
+
 
 const getMyEnrolledCourseFromDB = async(studentId: string, query: Record<string, unknown>) => {
    const student = await Student.findOne({id: studentId});
@@ -191,7 +215,8 @@ const getMyEnrolledCourseFromDB = async(studentId: string, query: Record<string,
 .populate('offeredCourse')
     .populate('course')
     .populate('faculty')
-
+    .populate('student')
+    .populate('semesterRegistration')
     .populate('academicSemester')
     .populate('academicFaculty')
     .populate('academicDepartment'),  query)
@@ -205,8 +230,82 @@ const getMyEnrolledCourseFromDB = async(studentId: string, query: Record<string,
 }
 
 
+const generateStudentEnrollmentStatsIntoDB = async () => {
+  const aggregationResult = await Student.aggregate([
+    {
+      $lookup: {
+        from: "enrolledcourses",
+        localField: "_id",
+        foreignField: "student",
+        pipeline: [
+          {
+            $match: {
+              isEnrolled: true,
+              isCompleted: false,
+            },
+          },
+        ],
+        as: "enrollments", //2027010003-hadi //Sarika	2027020002
+      },
+    },
+    {
+      $addFields: {
+        totalEnrolledCourses: { $size: "$enrollments" },
+      },
+    },
+    {
+      $match: {
+        totalEnrolledCourses: { $gt: 0 }, // ✅ only enrolled students
+      },
+    },
+    
+  {
+  $project: {
+    _id: 1,
+    id: 1,
+    name: 1,
+    email: 1,
+    gender:1,
+    academicDepartment: 1,
+    totalEnrolledCourses: 1,
+  },
+}
+
+  ]);
+
+  for (const student of aggregationResult) {
+    await StudentEnrollmentStats.findOneAndUpdate(
+      { student: student._id },
+      {
+        student: student._id,
+        studentId: student.id, // ✅ now exists
+        name: student.name,
+        email: student.email,
+        gender: student.gender,
+        academicDepartment: student.academicDepartment,
+        totalEnrolledCourses: student.totalEnrolledCourses,
+        lastUpdated: new Date(),
+      },
+      { upsert: true, new: true }
+    );
+  }
+
+  // returning count is OK for admin operation logs
+  return aggregationResult.length;
+};
+
+const getTotalEnrolledCoursePerStudentFromDB = async () => {
+  return StudentEnrollmentStats.find()
+  .populate("academicDepartment", "name academicFaculty")
+  .sort({ totalEnrolledCourses: -1 })
+    .select("-__v");
+};
+
 export const EnrolledCourseServices = {
     createEnrolledCourseIntoDB,
+    getAllEnrolledCourseFromDB,
     updateEnrolledCourseMarksIntoDB,
     getMyEnrolledCourseFromDB,
+    generateStudentEnrollmentStatsIntoDB,
+    getTotalEnrolledCoursePerStudentFromDB
 }

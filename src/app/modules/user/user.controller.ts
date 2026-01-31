@@ -98,7 +98,20 @@ const getMe = catchAsync(async(req, res) => {
         message: "Existing User is retrieved successfully!",
         data: result,
     })
+});
+
+const getVisitorsStates = catchAsync(async(req, res) => {
+    const result = await UserServices.getVisitorsStateFromDB()
+
+    sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Visitor statistics retrieved successfully",
+    data: result,
+    })
 })
+
+
 
 export const UserControllers = {
     createStudentUser,
@@ -107,6 +120,7 @@ export const UserControllers = {
     getAllUser,
     getUsersCountForAdminDashBoard,
     getMe,
+    getVisitorsStates,
 }
 // const createUser: RequestHandler = async(req, res, next)=>{
 //     try{

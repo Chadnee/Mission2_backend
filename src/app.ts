@@ -7,8 +7,10 @@ import router from './app/routes';
 import globalErrorHandler from './app/middlewares/globalErrorHandlers';
 import notFound from './app/middlewares/notFound';
 import cookieParser from 'cookie-parser';
+import visitorTracker from './app/middlewares/trackingVisitors';
 
 const app = express();
+app.use(visitorTracker); //Counts visistors once per Ip per day
 
 //parsers
 app.use(cookieParser())

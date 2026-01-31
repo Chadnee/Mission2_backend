@@ -9,7 +9,7 @@ import status from "http-status";
 
 //sub schema:
 
-const nameSchema = new Schema<TUserName>({
+export const nameSchema = new Schema<TUserName>({
     firstName: {
         type:String,
         required: true,

@@ -1,4 +1,6 @@
+import { TAcademicDepartment } from './../academic Department/academicDepartment.interface';
 import { Types } from "mongoose"
+import { TUserName } from "../student/student.interface";
 export type TCourseMarks = {
     classTest1: number;
     midTerm1: number;
@@ -22,4 +24,15 @@ export type TEnrolledCourse = {
     grade: TGrade;
     gradePoints: number;
     isCompleted: boolean;
+}
+
+export type TStudentEnrollmentStats = {
+  student: Types.ObjectId;
+  name: TUserName;
+  studentId: string;
+  email: string;
+  gender: string;
+  academicDepartment: TAcademicDepartment;
+  totalEnrolledCourses: number;
+  lastUpdated: Date;
 }

@@ -42,4 +42,5 @@ router.get('/total-users', auth('admin', 'superAdmin'),UserControllers.getUsersC
 
 router.get('/me', auth('admin','faculty','student'), UserControllers.getMe)
 
+router.get('/visitors', auth("admin", "superAdmin"), UserControllers.getVisitorsStates)
 export const UserRoutes = router;
