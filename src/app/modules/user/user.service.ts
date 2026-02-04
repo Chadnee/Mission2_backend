@@ -205,8 +205,12 @@ const getMeFromDB = async(userId: string, role: string)=>{
      let result = null;
 
      if(role === 'student'){
-        result = await Student.findOne({id: userId})
-     };
+        result = await Student.findOne({id: userId}).populate('admissionSemester')
+    .populate({
+      path:'academicDepartment',
+      populate: { path:'academicFaculty' }})
+    }
+     ;
      if(role === 'admin'){
         result = await Admin.findOne({id: userId})
      };

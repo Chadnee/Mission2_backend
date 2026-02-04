@@ -12,7 +12,7 @@ router.post('/create-academic-department',
 
 router.get('/', AcademicDepartmentController.getAllAcademicDepartment);
 router.get('/:department_id', AcademicDepartmentController.getSingleAcademicDepartment);
-router.patch('/:department_id', 
+router.patch('/updated/:department_id', 
     validateRequest(AcademicDepartmentValidation.updatedAcademicDepartmentValidation),
 AcademicDepartmentController.updateAcademicDepartment
 )
