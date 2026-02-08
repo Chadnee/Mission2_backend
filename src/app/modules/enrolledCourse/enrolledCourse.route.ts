@@ -44,4 +44,10 @@ router.get('/student-enrollment-stats',
     auth('admin', 'superAdmin'),
 EnrolledCourseControllers.getTotalEnrolledCoursePerStudent)
 
+//Get your own enrollement state if you are now existing student user
+router.get('/student-enrollment-stats/getMe', 
+    auth('student'),
+    EnrolledCourseControllers.getTotalEnrolledCourseStateForMe)
+
+
 export const enrolledCourseRoutes = router

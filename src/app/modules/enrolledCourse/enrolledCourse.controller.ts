@@ -71,6 +71,18 @@ const getTotalEnrolledCoursePerStudent = catchAsync(async(req, res , next) => {
     })
 })
 
+const getTotalEnrolledCourseStateForMe = catchAsync(async(req, res) => {
+    const {userId} = req.user;
+    const result = await EnrolledCourseServices.getTotalEnrolledCourseStateForMeFromDB(userId)
+
+    sendResponse(res, {
+        statusCode: status.OK,
+        success: true,
+        message : "My enrollement stat is retrieved",
+        data: result,
+    })
+})
+
 
 export const EnrolledCourseControllers = {
     createEnrolledCourse,
@@ -79,4 +91,6 @@ export const EnrolledCourseControllers = {
     getAllEnrolledCourses,
     generateStudentEnrollmentStats,
     getTotalEnrolledCoursePerStudent,
+    getTotalEnrolledCourseStateForMe,
+    
 }

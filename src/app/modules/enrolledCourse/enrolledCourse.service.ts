@@ -301,11 +301,17 @@ const getTotalEnrolledCoursePerStudentFromDB = async () => {
     .select("-__v");
 };
 
+const getTotalEnrolledCourseStateForMeFromDB = async (studentId : string) => {
+    const result = await StudentEnrollmentStats.findOne({studentId: studentId});
+    return result
+}
+
 export const EnrolledCourseServices = {
     createEnrolledCourseIntoDB,
     getAllEnrolledCourseFromDB,
     updateEnrolledCourseMarksIntoDB,
     getMyEnrolledCourseFromDB,
     generateStudentEnrollmentStatsIntoDB,
-    getTotalEnrolledCoursePerStudentFromDB
+    getTotalEnrolledCoursePerStudentFromDB,
+    getTotalEnrolledCourseStateForMeFromDB
 }
