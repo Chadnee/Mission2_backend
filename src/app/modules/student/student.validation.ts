@@ -1,4 +1,3 @@
-import { studentValidationSchema } from './student.validation';
 import { z } from "zod";
 
 const userNameValidationSchema = z.object({

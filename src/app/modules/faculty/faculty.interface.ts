@@ -7,11 +7,7 @@ export type TFaculty = {
     user: Types.ObjectId;
     gender: 'male' | 'female' | 'other';
     dateOfBirth: string;
-    email: {
-    type: String,
-    required: true,
-    unique: true,
-}
+    email:string;
     contactNo: string;
     emergencyContactNo: string;
     presentAddress: string;

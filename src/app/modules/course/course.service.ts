@@ -1,7 +1,7 @@
 import mongoose, { startSession } from "mongoose";
 import QueryBuilder from "../../builder/queryBuilder";
 import { TAssignCourseWithFaculty, TCourse } from "./course.interface";
-import { Course, Course, CourseFaculty } from "./course.schemaAndModel";
+import { Course, CourseFaculty } from "./course.schemaAndModel";
 import AppError from "../../Error/AppError";
 import status from "http-status";
 

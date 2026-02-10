@@ -4,7 +4,6 @@ import { TOfferedCourse } from './offeredCourse.interface';
 import { OfferedCourse } from './offeredCourse.modelAndSchema';
 import { SemesterRegistration } from '../semestersRegistration/semesterRegistration.modelAndSchema';
 import AppError from '../../Error/AppError';
-import status from 'http-status';
 import { AcademicDepartment } from '../academic Department/academicDepartment.schemaAndModel';
 import { AcademicFaculty} from '../academicFaculty/academicFaculty..schemaAndModel';
 import { Course } from '../course/course.schemaAndModel';

@@ -64,7 +64,7 @@ const deleteFacultyFromDB = async (id: string) => {
     await session.commitTransaction();
     await session.endSession();
     return deleteFaculty;
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new AppError(status.BAD_REQUEST, err);

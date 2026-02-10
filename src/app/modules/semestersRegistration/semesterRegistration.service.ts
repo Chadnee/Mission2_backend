@@ -6,7 +6,6 @@ import { AcademicSemesterModel } from "../academicSemester/academicSemester.sche
 import { TSmesterRegistration } from "./semesterRegistration.interface";
 import { SemesterRegistration } from "./semesterRegistration.modelAndSchema";
 import QueryBuilder from '../../builder/queryBuilder';
-import { registrationSearchableFields } from '../admin/admin.constant';
 
 const createSemesterRegistrationIntoDB = async(payload: TSmesterRegistration)=> {
     const academicSemester = payload.academicSemester;

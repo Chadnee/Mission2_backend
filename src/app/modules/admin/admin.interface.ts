@@ -6,7 +6,7 @@ export type TAdmin = {
     designation: string;
     gender: 'male' | 'female' | 'other';
     dateOfBirth: string;
-    email: string;
+    email:string;
     contactNo: string;
     emergencyContactNo: string;
     user: Types.ObjectId,

@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { TAssignCourseWithFaculty, TCourse, TCourseAssignFaculty, TCourseFacultyAssign, TPreRequisiteCourses } from "./course.interface";
+import { TAssignCourseWithFaculty, TCourse, TPreRequisiteCourses } from "./course.interface";
 
 const preRequisiteCourseSchema = new Schema<TPreRequisiteCourses>({
     course: {

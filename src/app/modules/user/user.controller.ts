@@ -1,6 +1,5 @@
 
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import studentValidationSchema from "../student/student.validation";
+
 import { UserServices } from "./user.service";
 import sendResponse from "../../utils/sendResponse";
 import status from "http-status";

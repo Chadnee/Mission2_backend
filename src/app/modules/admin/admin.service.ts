@@ -44,7 +44,7 @@ const deleteAdminAndUserFromDB = async(id: string) => {
   await session.endSession();
 
   return deleteAdmin;
-   }catch(err){
+   }catch(err: any){
     await session.abortTransaction();
     await session.endSession();
     throw new AppError(status.BAD_REQUEST, err)

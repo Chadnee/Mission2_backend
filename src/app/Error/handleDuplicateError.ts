@@ -1,5 +1,5 @@
 import { TErrorSource, TGenericErrorResponse } from './../interface/error';
-const handleDuplicateError = (err):TGenericErrorResponse => {
+const handleDuplicateError = (err: any): TGenericErrorResponse=> {
     const match = err.message.match(/dup key:.*?"(.*?)"/);
 
     const extract_msg = match && match[1];

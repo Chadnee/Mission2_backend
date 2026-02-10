@@ -106,7 +106,7 @@ const createEnrolledCourseIntoDB = async(userId:string, payload: TEnrolledCourse
          await session.commitTransaction();
          await session.endSession();
          return result;
-     }catch(err){
+     }catch(err:any){
          await session.abortTransaction();
          await session.endSession();
          throw new AppError(status.BAD_REQUEST, err);

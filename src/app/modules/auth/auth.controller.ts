@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
 import config from "../../config";
+import AppError from "../../Error/AppError";
 
 const loginUser = catchAsync(async(req, res ) => {
     const result = await AuthService.loginUserIntoDB(req.body);
@@ -32,7 +33,7 @@ const changePassword = catchAsync(async(req, res ) => {
         statusCode: status.OK,
         success: true,
         message: 'Password hase been changed successfully',
-        data:'ues, changed',
+        data:'use, changed',
     })
 })
 
@@ -61,6 +62,9 @@ const forgetPassword = catchAsync(async(req, res) => {
 
 const resetPassword = catchAsync(async(req, res) => {
     const token = req.headers.authorization;
+    if(!token){
+       throw new AppError(status.UNAUTHORIZED, "Authorization token is required")
+    }
     const result = await AuthService.resetPaawordIntoDB(req.body, token)
     sendResponse(res, {
         statusCode: status.OK,

@@ -81,7 +81,7 @@ const createStudentUserIntoDB = async(file:any, password: string, studentData: T
               return {newStudent, newUser};
           }
     
-} catch(err) {
+} catch(err:any) {
    await session.abortTransaction();
    await session.endSession();
    throw new AppError(status.BAD_REQUEST, err)
@@ -135,7 +135,7 @@ const createFacultyUserIntoDB = async(file:any, passWord: string, facultyData:TF
         await session.endSession
         return {newFaculty, newUser};
        }
-    }catch(err){
+    }catch(err: any){
         await session.abortTransaction();
         await session.endSession();
         throw new AppError(status.BAD_REQUEST, err)
@@ -178,7 +178,7 @@ const createAdminUserIntoDB = async(file:any, password: string, adminData: TAdmi
          await session.commitTransaction();
          await session.endSession();
          return newAdmin;
-        }catch(err){
+        }catch(err: any){
          await session.abortTransaction();
          await session.endSession()
          throw new AppError(status.BAD_REQUEST,err)

@@ -12,7 +12,7 @@ import { USER_ROLE } from './user.constant';
 // }
 export interface TUser {
   id: string;
-  email: string;
+  email:string;
   password: string;
   needsPasswordChange: boolean;
   passWordChangedAt?: Date;

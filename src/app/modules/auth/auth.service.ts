@@ -1,4 +1,3 @@
-import { JwtPayload } from 'jsonwebtoken';
 import status from "http-status";
 import AppError from "../../Error/AppError";
 import { User } from "../user/user.schemaAndModel";
@@ -42,8 +41,8 @@ const loginUserIntoDB = async(payload: TLoginUser) => {
         role: userData.role
     }
     //const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn:'10d' });
-    const accessToken = createToken(jwtPayload, config.jwt_access_secret as string, config.jwt_access_expiresIn as string)
-    const refreshToken = createToken(jwtPayload, config.jwt_refresh_secret as string, config.jwt_refresh_expiresIn as string)
+    const accessToken = createToken(jwtPayload, config.jwt_access_secret as jwt.Secret, config.jwt_access_expiresIn )
+    const refreshToken = createToken(jwtPayload, config.jwt_refresh_secret as jwt.Secret, config.jwt_refresh_expiresIn )
     return {
         accessToken,
         refreshToken,
@@ -106,7 +105,7 @@ const refreshTokenIntoDB = async(token: string)=>{
        
      //checking if the given token is valid
          const decoded = jwt.verify(
-             token,config.jwt_refresh_secret as string)as JwtPayload;
+             token,config.jwt_refresh_secret as jwt.Secret)as JwtPayload;
  
          const {role, userId, iat}= decoded;
  
@@ -139,8 +138,8 @@ const refreshTokenIntoDB = async(token: string)=>{
                 role: userData.role
             }
             const accessToken = createToken(
-                jwtPayload, config.jwt_access_secret as string, 
-                config.jwt_access_expiresIn as string
+                jwtPayload, config.jwt_access_secret as jwt.Secret, 
+                config.jwt_access_expiresIn
             )
 
                 return {
@@ -170,7 +169,7 @@ const forgetPasswordIntoDB = async(id: string) => {
     role: user.role
   };
   const resetToken  = createToken(
-    jwtPayload, config.jwt_access_secret as string, '10m'
+    jwtPayload, config.jwt_access_secret as jwt.Secret, '10m'
   ); //which is also a accesstoken
   const resetUILink = `${config.reset_password_ui_link}?id=${user.id}&token=${resetToken}`;
   //const resetUILink = `http://localhost:5174?id=${user.id}&token=${resetTokwn }`;
