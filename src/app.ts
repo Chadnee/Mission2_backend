@@ -25,12 +25,11 @@ app.use(express.json());
 // ✅ Allow multiple origins (localhost + your deployed frontend)
 const allowedOrigins = [
   'http://localhost:5173',
-  config.database_url as string, // set this in Vercel dashboard
+  config.FRONTEND_URL
 ].filter(Boolean);
-
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin as string)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
