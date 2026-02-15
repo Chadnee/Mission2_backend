@@ -27,7 +27,7 @@ app.use(express.json());
 
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://technouniversityfrontend.vercel.app/' // Direct URL
+    'https://technouniversityfrontend.vercel.app' // Direct URL
 ];
 
 app.use(cors({
@@ -40,6 +40,8 @@ app.use(cors({
     },
     credentials: true // Include cookies with requests
 }));
+
+app.options('*', cors());
 
 
 // const allowedOrigins = [
