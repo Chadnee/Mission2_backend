@@ -23,20 +23,39 @@ app.use(visitorTracker); //Counts visistors once per Ip per day
 app.use(cookieParser())
 app.use(express.json());
 // ✅ Allow multiple origins (localhost + your deployed frontend)
+
+
 const allowedOrigins = [
-  'http://localhost:5173',
-  config.FRONTEND_URL
-].filter(Boolean);
+    'http://localhost:5173',
+    'https://technouniversityfrontend.vercel.app/' // Direct URL
+];
+
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin as string)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true); // Allow the request
+        } else {
+            callback(new Error('Not allowed by CORS')); // Block the request
+        }
+    },
+    credentials: true // Include cookies with requests
 }));
+
+
+// const allowedOrigins = [
+//   'http://localhost:5173',
+//   https://technouniversityfrontend.vercel.app/
+// ].filter(Boolean);
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (!origin || allowedOrigins.includes(origin as string)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+// }));
 //application routes
 
 //api/v1/students/create-student
