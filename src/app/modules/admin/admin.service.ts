@@ -9,13 +9,26 @@ import { adminSearcheableFields } from "./admin.constant";
 
 
 const getAllAdminFromDB = async(query:Record<string, unknown>) => {
+    console.log("🔥 FUNCTION CALLED");
     const adminQuery =  new QueryBuilder(Admin.find(), query).search(adminSearcheableFields)
         .filter()
         .sort()
         .paginate()
         .fields();
+    
+    const meta = await adminQuery.countTotal();
     const result = await adminQuery.modelQuery;
-    return result;
+    
+       // ✅ DEBUG HERE
+    console.log("META BACKEND =>", meta);
+    console.log("RESULT BACKEND =>", result);
+
+    // console.log(adminQuery)
+    // // console.log(result)
+    return {
+        meta,
+        result
+    };
 }
 
 const getSingleAdminFromDB = async(id: string) => {
