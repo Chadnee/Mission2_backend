@@ -5,23 +5,49 @@ import dbConnect from "./lib/dbConnect";
 
 async function bootsTrap() {
   await dbConnect();
-  await seedSuperAdmin()
+  await seedSuperAdmin();
+
+  // Only listen locally — Vercel handles routing, not app.listen()
+  if (process.env.NODE_ENV !== "production") {
+    const port = config.port || 5000;
+    app.listen(port, () => {
+      console.log(`🚀 Server running locally on http://localhost:${port}`);
+    });
+  }
 }
-
-bootsTrap().catch(console.error)
-
-  const port = config.port || 5000;
-
-  app.listen(port, () => {
-    console.log(`🚀 Server running locally on http://localhost:${port}`);
-  });
-
 
 bootsTrap().catch((err) => {
   console.error("❌ Server failed to start", err);
 });
 
 export default app;
+
+
+// import app from "./app";
+// import config from "./app/config";
+// import { seedSuperAdmin } from "./app/modules/DB";
+// import dbConnect from "./lib/dbConnect";
+
+// async function bootsTrap() {
+//   await dbConnect();
+//   await seedSuperAdmin()
+// }
+
+// bootsTrap().catch(console.error)
+
+//   const port = config.port || 5000;
+
+//   app.listen(port, () => {
+//     console.log(`🚀 Server running locally on http://localhost:${port}`);
+//   });
+
+
+// bootsTrap().catch((err) => {
+//   console.error("❌ Server failed to start", err);
+// });
+
+// export default app;
+
 // import app from './app';
 // import config from './app/config';
 
