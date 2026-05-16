@@ -217,6 +217,7 @@ const getMeFromDB = async(userId: string, role: string)=>{
      if(role === 'faculty'){
         result = await Faculty.findOne({id: userId})
      };
+     console.log(result)
      return result;
 }
 
