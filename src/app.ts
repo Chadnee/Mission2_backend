@@ -30,19 +30,19 @@ const allowedOrigins = [
     'https://technouniversityfrontend.vercel.app' // Direct URL
 ];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true); // Allow the request
-        } else {
-            callback(new Error('Not allowed by CORS')); // Block the request
-        }
-    },
-    credentials: true // Include cookies with requests
-}));
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: Function) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
 
-app.options('*', cors());
-
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ← same config
 
 // const allowedOrigins = [
 //   'http://localhost:5173',
