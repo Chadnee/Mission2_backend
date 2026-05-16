@@ -8,6 +8,7 @@ const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
 
 const getAllAcademicFacultyFromDB = async () => {
   const result = await AcademicFaculty.find();
+  console.log(result)
   return result;
 };
 
