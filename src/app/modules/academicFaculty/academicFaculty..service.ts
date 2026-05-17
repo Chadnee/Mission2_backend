@@ -2,6 +2,7 @@ import { TAcademicFaculty } from './academicFaculty.interface';
 import { AcademicFaculty } from './academicFaculty..schemaAndModel';
 
 const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
+  console.log(payload)
   const result = await AcademicFaculty.create(payload);
   return result;
 };
