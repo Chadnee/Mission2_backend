@@ -3,7 +3,6 @@ import {StudentModel, TGuardian, TLocalGuardian, TStudent, TUserName} from "./st
 import validator from 'validator';
 import bcrypt from 'bcrypt'
 import config from "../../config";
-import { User } from "../user/user.schemaAndModel";
 import AppError from "../../Error/AppError";
 import status from "http-status";
 
@@ -48,7 +47,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     user: {
         type: Schema.Types.ObjectId,
         required: [true, 'user Id is required'], unique:true,
-        ref: 'User',
+        ref: 'user',
     },
     name: {type: nameSchema, required: [true, "name is must be required"]},
     gender: {type: String, required: [true, 'Gender is must be required'],

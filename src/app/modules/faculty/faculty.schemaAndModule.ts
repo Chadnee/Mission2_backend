@@ -17,10 +17,10 @@ const facultySchema = new Schema<TFaculty>({
         type: String,
         required: true,
     },
-    user: {
+     user: {
         type: Schema.Types.ObjectId,
+        required: [true, 'user Id is required'], unique:true,
         ref: 'user',
-        required:true 
     },
     gender: {
         type: String,

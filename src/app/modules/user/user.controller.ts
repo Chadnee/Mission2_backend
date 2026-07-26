@@ -90,12 +90,13 @@ const getUsersCountForAdminDashBoard = catchAsync(async(req, res) => {
 
 const getMe = catchAsync(async(req, res) => {
     const {userId, role} = req.user;
+    console.log(role)
     const result = await UserServices.getMeFromDB(userId, role);
     sendResponse(res, {
         statusCode: status.OK,
         success: true,
         message: "Existing User is retrieved successfully!",
-        data: result,
+        data: result 
     })
 });
 

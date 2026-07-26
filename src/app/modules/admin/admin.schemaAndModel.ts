@@ -37,9 +37,9 @@ const adminSchema = new Schema<TAdmin>({
         required: true,
     },
     user: {
-         type: Schema.Types.ObjectId,
-         ref:"admin",
-         required: true
+        type: Schema.Types.ObjectId,
+        required: [true, 'user Id is required'], unique:true,
+        ref: 'user',
     },
     presentAddress: {
         type: String,

@@ -24,6 +24,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   //admissionSemester: Types.ObjectId; academicDepartment
   const studentQuery = new QueryBuilder(Student.find()
      .populate('admissionSemester')
+     .populate('user')
     .populate({
       path:'academicDepartment',
       populate: { path:'academicFaculty' }}), query)
@@ -58,7 +59,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await Student.findOne({ id })
-    .populate('admissionSemester')
+    .populate('admissionSemester').populate('user')
     .populate({
       path: 'academicDepartment',
       populate: { path: 'academicFaculty' },

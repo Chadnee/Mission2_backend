@@ -8,7 +8,7 @@ async function bootsTrap() {
   await seedSuperAdmin();
 
   // Only listen locally — Vercel handles routing, not app.listen()
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV === "production") {
     const port = config.port || 5000;
     app.listen(port, () => {
       console.log(`🚀 Server running locally on http://localhost:${port}`);

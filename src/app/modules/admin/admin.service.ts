@@ -10,7 +10,7 @@ import { adminSearcheableFields } from "./admin.constant";
 
 const getAllAdminFromDB = async(query:Record<string, unknown>) => {
     console.log("🔥 FUNCTION CALLED");
-    const adminQuery =  new QueryBuilder(Admin.find(), query).search(adminSearcheableFields)
+    const adminQuery =  new QueryBuilder(Admin.find().populate('user'), query).search(adminSearcheableFields)
         .filter()
         .sort()
         .paginate()
@@ -32,7 +32,7 @@ const getAllAdminFromDB = async(query:Record<string, unknown>) => {
 }
 
 const getSingleAdminFromDB = async(id: string) => {
-    const result = await Admin.findById({_id: id});
+    const result = await Admin.findById({_id: id}).populate('user');
     return result;
 }
 
